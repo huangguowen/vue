@@ -183,7 +183,7 @@
                 let selectUserData = [],newData = [],delKeyIndex = [],delDataIndex = []
                 this.userData.forEach((item) => {
                     if (e.indexOf(item.key) != -1) {
-                      selectUserData.push(item)
+                        selectUserData.push(item)
                     }
                     if (this.oldKeys.indexOf(item.key) != -1 && e.indexOf(item.key) == -1){
                         for (let index in this.oldKeys){
@@ -192,9 +192,9 @@
                             }
                         }
                         for (let index in this.oldSelectData){
-                          if (item.key == this.oldSelectData[index].key){
-                            delDataIndex.push(index)
-                          }
+                            if (item.key == this.oldSelectData[index].key){
+                                delDataIndex.push(index)
+                            }
                         }
                     }
                 });
@@ -225,17 +225,28 @@
             },
             /*取消全选*/
             cancelAll() {
-                let selectUserData = []
-                if(this.selectUserKeys.length>0){
-                    for (let index in this.userData) {
-                        if (this.selectUserKeys.indexOf(this.userData[index].key) == -1) {
-                            selectUserData.push(this.userData[index])
-                        }
+                this.selectUserKeys = this.oldKeys
+                this.selectUserData = this.oldSelectData
+                for (let index in this.userData) {
+                    if (this.selectUserKeys.indexOf(this.userData[index].key) != -1) {
+                        this.selectUserKeys.splice(this.selectUserKeys.indexOf(this.userData[index].key),1)
                     }
-                    this.selectUserKeys = this.oldKeys
-                    this.selectUserData = this.oldSelectData.concat(selectUserData)
                 }
-
+                let delDataIndex = []
+                for (let index in this.selectUserData) {
+                    if (this.selectUserKeys.indexOf(this.selectUserData[index].key) == -1) {
+                        delDataIndex.push(this.selectUserData[index].key)
+                    }
+                }
+                if (delDataIndex.length > 0){
+                    delDataIndex.forEach((item) => {
+                        for (let index in this.selectUserData){
+                            if (item == this.selectUserData[index].key){
+                                this.selectUserData.splice(index,1)
+                            }
+                        }
+                    })
+                }
             },
             /*清空*/
             selectEmpty() {
